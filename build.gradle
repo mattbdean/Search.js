@@ -19,6 +19,7 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.jetbrains.kotlin:kotlin-stdlib:0.9.66'
+    compile 'junit:junit:4.11'
 }
 
 task run(dependsOn: classes, type: JavaExec) {
