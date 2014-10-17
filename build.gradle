@@ -1,0 +1,27 @@
+def kotlinVersion = '0.9.66' // M9
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:0.9.66"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // The production code uses the SLF4J logging API at compile time
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.9.66'
+}
+
+task run(dependsOn: classes, type: JavaExec) {
+    main = 'net.dean.wordsearch.WordsearchPackage'
+    classpath = sourceSets.main.runtimeClasspath
+}
