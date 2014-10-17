@@ -22,7 +22,6 @@ dependencies {
     compile 'junit:junit:4.11'
 }
 
-task run(dependsOn: classes, type: JavaExec) {
-    main = 'net.dean.wordsearch.WordsearchPackage'
-    classpath = sourceSets.main.runtimeClasspath
+test {
+    testLogging.showStandardStreams = true
 }
