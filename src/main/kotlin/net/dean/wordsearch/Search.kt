@@ -1,7 +1,11 @@
 package net.dean.wordsearch
 
-import java.util.NoSuchElementException
 import java.util.ArrayList
+import org.apache.log4j.LogManager
+import org.apache.log4j.Level
+import java.util.NoSuchElementException
+
+private val logger = LogManager.getLogger(javaClass<Puzzle>())
 
 public class Puzzle(val lines: List<String>) {
     {
@@ -36,7 +40,7 @@ public class Puzzle(val lines: List<String>) {
             // Scan left to right starting at the top left (0,0)
             for (y in 0..limitY) {
                 for (x in 0..limitX) {
-                    debug("Searching for \"$word\" at ($x,$y): '${get(x, y)}'")
+//                    logger.debug("Searching for \"$word\" at ($x,$y): '${get(x, y)}'")
                     for (dir in Direction.values()) {
                         var newX = x
                         var newY = y
@@ -44,7 +48,7 @@ public class Puzzle(val lines: List<String>) {
                         var findStr = ""
                         while (has(newX, newY) && !findStr.contentEquals(word) && get(newX, newY) == word.charAt(counter)) {
                             val c = get(newX, newY)
-                            debug("Looking $dir: ($newX,$newY): '$c'")
+//                            logger.debug("Looking $dir: ($newX,$newY): '$c'")
 
                             newX += dir.incrementX
                             newY += dir.incrementY
@@ -54,7 +58,7 @@ public class Puzzle(val lines: List<String>) {
 
                         if (findStr.contentEquals(word)) {
                             val s = Solution(word, dir, x, y)
-                            solution(s.toString())
+                            logger.info("Found solution: $s")
                             solutions.add(s)
                         }
                     }
@@ -77,15 +81,3 @@ public enum class Direction(val incrementX: Int, val incrementY: Int) {
     WEST: Direction(-1, 0)
     NORTHWEST: Direction(-1, -1)
 }
-
-// Logging
-fun debug(msg: String) {
-    log("DEBUG", msg)
-}
-fun solution(msg: String) {
-    log("SOLUTION", msg)
-}
-private fun log(level: String, msg: String) {
-    println("[$level] $msg")
-}
-
