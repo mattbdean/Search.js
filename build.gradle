@@ -1,25 +1,29 @@
 def kotlinVersion = '0.9.66' // M9
+def springVersion = '4.1.1.RELEASE'
 
 buildscript {
+    ext.kotlin_version = '0.9.66'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:0.9.66"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE"
     }
 }
 
-apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'spring-boot'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.9.66'
-    compile 'junit:junit:4.11'
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile 'junit:junit:4.11'
 }
 
 test {
