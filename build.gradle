@@ -26,6 +26,10 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
+springBoot {
+    mainClass = 'net.dean.wordsearch.Application'
+}
+
 test {
     testLogging.showStandardStreams = true
 }
