@@ -18,10 +18,7 @@ html, body {
 
 #puzzle-table td {
     padding: 0;
-}
-
-#puzzle-table td > input.unused {
-    border-color: #fff;
+    background-color: #fff;
 }
 
 #puzzle-table td > input {
@@ -29,6 +26,13 @@ html, body {
     padding: 3px;
     font-size: 15px;
     font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+#puzzle-table td > input.done {
+    /* Override the 'disabled' style */
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #fff;
 }
 
 #words {

@@ -75,7 +75,8 @@ function showSolutions(solutions) {
     var i, j, x, y, element, solution, direction, color, colorCss, wordArray;
 
     $('#puzzle-table').find('td > input').each(function() {
-        $(this).addClass('unused');
+        $(this).prop('disabled', true);
+        $(this).addClass('done');
     });
 
     for (i = 0; i < solutions.length; i++) {
