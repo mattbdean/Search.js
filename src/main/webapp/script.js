@@ -13,7 +13,7 @@ var testing = {
           "HRWSIAIOETDRCBTLVGTHOLWF",
           "SCLZVISNHAEBEEHRGMILDWES",
           "XHNVEHTAFIKAAPKMBNERVTYJ",
-          "DNOERFUDENATFCYBOCBVKX0I",
+          "DNOERFUDENATFCYBOCBVKXOI",
           "LBEWRLREKHOHOXBGIVNAOTVM",
           "AOCSEDETSKSTGZCUGOPJOCFB",
           "KZOKERSXRESYEGJXYOZTRMCY"],
@@ -29,16 +29,42 @@ var testing = {
 }.init();
 
 // Same as net.dean.wordsearch.Direction
+function Direction(incrementX, incrementY) {
+    this.incrementX = incrementX;
+    this.incrementY = incrementY;
+}
 var directions = {
-    NORTH: {incrementX: 0, incrementY: -1},
-    NORTHEAST: {incrementX: 1, incrementY: -1},
-    EAST: {incrementX: 1, incrementY: 0},
-    SOUTHEAST: {incrementX: 1, incrementY: 1},
-    SOUTH: {incrementX: 0, incrementY: 1},
-    SOUTHWEST: {incrementX: -1, incrementY: 1},
-    WEST: {incrementX: -1, incrementY: 0},
-    NORTHWEST: {incrementX: -1, incrementY: -1}
+    NORTH: new Direction(0, -1),
+    NORTHEAST: new Direction(1, -1),
+    EAST: new Direction(1, 0),
+    SOUTHEAST: new Direction(1, 1),
+    SOUTH: new Direction(0, 1),
+    SOUTHWEST: new Direction(-1, 1),
+    WEST: new Direction(-1, 0),
+    NORTHWEST: new Direction(-1, -1)
 };
+
+function Color(red, green, blue) {
+    this.red = red;
+    this.green = green;
+    this.blue = blue;
+}
+
+function random(max) {
+    return Math.floor(Math.random() * max);
+}
+
+var seedColor = new Color(255, 255, 255);
+
+function getRandomColor() {
+    "use strict";
+    var red, green, blue;
+    red = Math.floor((random(256) + seedColor.red) / 2);
+    green = Math.floor((random(256) + seedColor.green) / 2);
+    blue = Math.floor((random(256) + seedColor.blue) / 2);
+
+    return new Color(red, green, blue);
+}
 
 function getCoordinate(x, y) {
     return $('.coordinate[data-x="{0}"][data-y="{1}"]'.format(x, y))
@@ -46,20 +72,20 @@ function getCoordinate(x, y) {
 
 function showSolutions(solutions) {
     "use strict";
-    var i, j, x, y, element, solution, direction;
+    var i, j, x, y, element, solution, direction, color, colorCss, wordArray;
 
     for (i = 0; i < solutions.length; i++) {
+        color = getRandomColor();
+        colorCss = 'rgb({0},{1},{2})'.format(color.red, color.green, color.blue);
+        console.log(colorCss);
         solution = solutions[i];
         x = solution.x;
         y = solution.y;
 
-        var wordArray = solution.word.split('');
+        wordArray = solution.word.split('');
         for (j = 0; j < wordArray.length; j++) {
             element = getCoordinate(x, y);
-
-            if (!element.hasClass('solution')) {
-                element.addClass('solution');
-            }
+            element.css('background-color', colorCss);
             direction = directions[solution.dir];
 
             if (j != wordArray.length - 1) {
