@@ -11,8 +11,16 @@ import org.apache.log4j.LogManager
 public class SearchTest {
     private val logger = LogManager.getLogger(javaClass<SearchTest>())
 
-    public test fun testSolutionsCorrect() {
-        val puzzle = load("/puzzle1.txt")
+    public test fun testPuzzle1() {
+        test(1)
+    }
+
+    public test fun testPuzzle2() {
+        test(2);
+    }
+
+    private fun test(id: Int) {
+        val puzzle = load("/puzzle$id.txt")
 
         val expected = puzzle.solutions
         val startTime = System.currentTimeMillis()
@@ -24,7 +32,7 @@ public class SearchTest {
             assertTrue(sol in expected)
         }
 
-        logger.info("Completed puzzle1.txt in $stopTime milliseconds")
+        logger.info("Completed puzzle$id.txt in $stopTime milliseconds")
     }
 
     private fun load(file: String): TestPuzzle {
