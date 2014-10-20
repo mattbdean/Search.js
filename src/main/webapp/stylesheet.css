@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     width: 100%;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
 .coordinate {
@@ -12,6 +13,22 @@ html, body {
 
 #puzzle-table {
     border-collapse: collapse;
+    border: medium solid black;
+}
+
+#puzzle-table td {
+    padding: 0;
+}
+
+#puzzle-table td > input {
+    border: 1px #d3d3d3 dotted;
+    padding: 3px;
+    font-size: 15px;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+textarea {
+    font-family: Roboto;
 }
 
 #container-main {
