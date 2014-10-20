@@ -74,6 +74,10 @@ function showSolutions(solutions) {
     "use strict";
     var i, j, x, y, element, solution, direction, color, colorCss, wordArray;
 
+    $('#puzzle-table td > input').each(function() {
+        $(this).addClass('unused');
+    });
+
     for (i = 0; i < solutions.length; i++) {
         color = getRandomColor();
         colorCss = 'rgb({0},{1},{2})'.format(color.red, color.green, color.blue);
@@ -86,7 +90,9 @@ function showSolutions(solutions) {
         for (j = 0; j < wordArray.length; j++) {
             element = getCoordinate(x, y);
             element.css('background-color', colorCss);
+            element.css('border-color', colorCss);
             direction = directions[solution.dir];
+
 
             if (j != wordArray.length - 1) {
                 x += direction.incrementX;
@@ -156,7 +162,6 @@ $(function() {
             }, dataType: 'json',
             type: 'POST',
             success: function(data, textStatus, jqXHR) {
-                console.log(data);
                 showSolutions(data.solutions);
             },
             error: function(jqXHR, textStatus, error) {

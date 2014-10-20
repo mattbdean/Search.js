@@ -20,6 +20,10 @@ html, body {
     padding: 0;
 }
 
+#puzzle-table td > input.unused {
+    border-color: #fff;
+}
+
 #puzzle-table td > input {
     border: 1px #d3d3d3 dotted;
     padding: 3px;
@@ -27,8 +31,30 @@ html, body {
     font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
-textarea {
-    font-family: Roboto;
+#words {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    margin: 10px 0;
+}
+
+#solve {
+    background: #3498db linear-gradient(to bottom, #3498db, #2980b9);
+    border-radius: 15px;
+    text-shadow: 1px 1px 3px #666;
+    box-shadow: 0 1px 3px #666666;
+    color: #ffffff;
+    font-size: 23px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+#solve:hover {
+    background: #3cb0fd linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+#container-puzzle {
+    margin: 25px 0;
 }
 
 #container-main {
