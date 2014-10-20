@@ -20,17 +20,20 @@ repositories {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'org.apache.logging.log4j:log4j-core:2.0.2'
     testCompile 'junit:junit:4.11'
 }
 
 springBoot {
-    mainClass = 'net.dean.wordsearch.Application'
+    mainClass = 'net.dean.wordsearch.server.Application'
 }
 
 test {
     testLogging.showStandardStreams = true
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }

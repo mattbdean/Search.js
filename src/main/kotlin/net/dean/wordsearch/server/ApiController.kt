@@ -9,13 +9,14 @@ import net.dean.wordsearch.Solution
 import net.dean.wordsearch.Puzzle
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.http.HttpStatus
+import org.springframework.ui.Model
 
 Controller
 public class ApiController {
 
     RequestMapping(value = array("/solve"), method=array(RequestMethod.POST))
     ResponseBody
-    public fun index([RequestParam(value = "lines", required = true)] lineStr: String,
+    public fun solve([RequestParam(value = "lines", required = true)] lineStr: String,
                      [RequestParam(value = "words", required = true)] wordStr: String): SolutionResponse {
         val lines = lineStr.split(',').toList()
         val words = wordStr.split(',').toList()
