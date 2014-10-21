@@ -45,34 +45,100 @@ var directions = {
 };
 
 function Color(red, green, blue) {
-    this.red = red;
-    this.green = green;
-    this.blue = blue;
+    this.red = parseInt(red);
+    this.green = parseInt(green);
+    this.blue = parseInt(blue);
+
+    this.asCssRgb = function() {
+        return 'rgb({0},{1},{2})'.format(red, green, blue);
+    };
+    this.asDataRgb = function() {
+        return '{0}|{1}|{2}'.format(red, green, blue);
+    };
 }
 
+/**
+ * The maximum number in an RGB value (255)
+ * @type {number}
+ */
+var rgbMax = 255;
+
+/**
+ * Overlays one channel on top of the other. Algorithm taken from https://en.wikipedia.org/wiki/Blend_modes#Overlay.
+ * @param base The RGB value (0-255) of a single channel the base layer
+ * @param top The RGB value (0-255) of the same channel on the top layer
+ * @returns {number} The new value of the channel after the two have been blended.
+ */
+function overlay(base, top) {
+    var decimal,
+        a = base / rgbMax,
+        b = top / rgbMax;
+
+    if (a < 0.5) {
+        decimal = 2 * a * b;
+    } else {
+        decimal = 1 - (2 * (1 - a) * (1 - b));
+    }
+    var rgb = decimal * 255;
+
+    return Math.floor(rgb); // Convert the denominator 255 for RGB channel
+}
+
+/**
+ * Overlays two colors
+ * @param colorA The base layer
+ * @param colorB The top layer
+ * @returns {Color} A new color blended using the "overlay" method (https://en.wikipedia.org/wiki/Blend_modes#Overlay)
+ */
+function blendOverlay(colorA, colorB) {
+    var r = overlay(colorA.red, colorB.red),
+        g = overlay(colorA.green, colorB.green),
+        b = overlay(colorA.blue, colorB.blue);
+    return new Color(r, g, b);
+}
+
+/**
+ * Generates a number in the range [0,x)
+ * @param max The upper bound, exclusive
+ * @returns {number} An integer between 0 (inclusive) and x (exclusive)
+ */
 function random(max) {
     return Math.floor(Math.random() * max);
 }
 
-var seedColor = new Color(255, 255, 255);
+/**
+ * The color that will be used to generate random colors in getRandomColor()
+ * @type {Color}
+ */
+var seed = new Color(255, 255, 255);
 
 function getRandomColor() {
     "use strict";
     var red, green, blue;
-    red = Math.floor((random(256) + seedColor.red) / 2);
-    green = Math.floor((random(256) + seedColor.green) / 2);
-    blue = Math.floor((random(256) + seedColor.blue) / 2);
+    red = Math.floor((random(256) + seed.red) / 2);
+    green = Math.floor((random(256) + seed.green) / 2);
+    blue = Math.floor((random(256) + seed.blue) / 2);
 
     return new Color(red, green, blue);
 }
 
+/**
+ * Gets an input on the grid whose 'data-x' attribute is x and 'data-y' attribute is y.
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @returns {*|jQuery|HTMLElement}
+ */
 function getCoordinate(x, y) {
     return $('.coordinate[data-x="{0}"][data-y="{1}"]'.format(x, y))
 }
 
+/**
+ * Highlights the solutions on the grid
+ * @param solutions An array of solutions
+ */
 function showSolutions(solutions) {
     "use strict";
-    var i, j, x, y, element, solution, direction, color, colorCss, wordArray;
+    var i, j, x, y, element, solution, direction, color, wordArray, colors;
 
     $('#puzzle-table').find('td > input').each(function() {
         $(this).prop('disabled', true);
@@ -81,7 +147,6 @@ function showSolutions(solutions) {
 
     for (i = 0; i < solutions.length; i++) {
         color = getRandomColor();
-        colorCss = 'rgb({0},{1},{2})'.format(color.red, color.green, color.blue);
         solution = solutions[i];
         x = solution.x;
         y = solution.y;
@@ -89,11 +154,18 @@ function showSolutions(solutions) {
         wordArray = solution.word.split('');
         for (j = 0; j < wordArray.length; j++) {
             element = getCoordinate(x, y);
-            element.css('background-color', colorCss);
-            element.css('border-color', colorCss);
-            element.addClass('used');
-            direction = directions[solution.dir];
 
+            if (element.data('colors')) {
+                colors = element.data('colors') + ',';
+            } else {
+                colors = "";
+            }
+
+            colors += color.asDataRgb();
+
+            element.addClass('used');
+            element.attr('data-colors', colors);
+            direction = directions[solution.dir];
 
             if (j != wordArray.length - 1) {
                 x += direction.incrementX;
@@ -101,6 +173,21 @@ function showSolutions(solutions) {
             }
         }
     }
+
+    $('input[data-colors]').each(function() {
+        var dataColors = $(this).attr('data-colors').split(',');
+        var color = undefined;
+        for (var i = 0; i < dataColors.length; i++) {
+            var rgb = dataColors[i].split('|');
+            var newColor = new Color(rgb[0], rgb[1], rgb[2]);
+            if (color === undefined) {
+                color = newColor;
+            } else {
+                color = blendOverlay(color, newColor);
+            }
+        }
+        $(this).css('background-color', color.asCssRgb());
+    })
 }
 
 $(function() {
