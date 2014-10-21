@@ -35,6 +35,10 @@ html, body {
     border: 1px solid #fff;
 }
 
+#puzzle-table td > input.done.used {
+    border-radius: 50%;
+}
+
 #words {
     font-family: Roboto, Arial, Helvetica, sans-serif;
     margin: 10px 0;

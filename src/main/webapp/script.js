@@ -82,7 +82,6 @@ function showSolutions(solutions) {
     for (i = 0; i < solutions.length; i++) {
         color = getRandomColor();
         colorCss = 'rgb({0},{1},{2})'.format(color.red, color.green, color.blue);
-        console.log(colorCss);
         solution = solutions[i];
         x = solution.x;
         y = solution.y;
@@ -92,6 +91,7 @@ function showSolutions(solutions) {
             element = getCoordinate(x, y);
             element.css('background-color', colorCss);
             element.css('border-color', colorCss);
+            element.addClass('used');
             direction = directions[solution.dir];
 
 
@@ -100,7 +100,6 @@ function showSolutions(solutions) {
                 y += direction.incrementY;
             }
         }
-
     }
 }
 
@@ -127,8 +126,6 @@ $(function() {
 
     // Bind pressing a key on the inputs
     $('.coordinate').keypress(function(e) {
-        
-        console.log(e.keyCode);
         if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
             // Allowed characters (letters and numbers only)
             $.emulateTab();
