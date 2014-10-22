@@ -28,22 +28,6 @@ var testing = {
     enabled: true
 }.init();
 
-// Same as net.dean.wordsearch.Direction
-function Direction(incrementX, incrementY) {
-    this.incrementX = incrementX;
-    this.incrementY = incrementY;
-}
-var directions = {
-    NORTH: new Direction(0, -1),
-    NORTHEAST: new Direction(1, -1),
-    EAST: new Direction(1, 0),
-    SOUTHEAST: new Direction(1, 1),
-    SOUTH: new Direction(0, 1),
-    SOUTHWEST: new Direction(-1, 1),
-    WEST: new Direction(-1, 0),
-    NORTHWEST: new Direction(-1, -1)
-};
-
 function Color(red, green, blue) {
     this.red = parseInt(red);
     this.green = parseInt(green);
@@ -148,6 +132,9 @@ function showSolutions(solutions) {
     for (i = 0; i < solutions.length; i++) {
         color = getRandomColor();
         solution = solutions[i];
+        if (!solution.found) {
+            continue;
+        }
         x = solution.x;
         y = solution.y;
 
@@ -165,7 +152,7 @@ function showSolutions(solutions) {
 
             element.addClass('used');
             element.attr('data-colors', colors);
-            direction = directions[solution.dir];
+            direction = DIRECTION[solution.dir];
 
             if (j != wordArray.length - 1) {
                 x += direction.incrementX;
@@ -187,7 +174,7 @@ function showSolutions(solutions) {
             }
         }
         $(this).css('background-color', color.asCssRgb());
-    })
+    });
 }
 
 $(function() {
@@ -234,25 +221,12 @@ $(function() {
             if (lines[y] === undefined) {
                 lines[y] = ""
             }
-            lines[y] += $(element).val();
+            lines[y] += $(element).val().toUpperCase();
         });
-        lines = lines.join(',');
+
+        words = $('#words').val().replace(/ /g, ',').toUpperCase().split(',');
         
-        words = $('#words').val().replace(/ /g, ',');
-        
-        $.ajax('http://localhost:8080/solve', {
-            data: {
-                lines: lines.toUpperCase(),
-                words: words.toUpperCase()
-            }, dataType: 'json',
-            type: 'POST',
-            success: function(data, textStatus, jqXHR) {
-                showSolutions(data.solutions);
-            },
-            error: function(jqXHR, textStatus, error) {
-                console.log(textStatus);
-            }
-        });
+        showSolutions(new Puzzle(lines).solve(words));
     });
     
     // Fill in testing data

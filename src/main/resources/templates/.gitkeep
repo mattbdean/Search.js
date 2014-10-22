@@ -1,1 +1,0 @@
-Spring Boot needs this directory to exist for Thymeleaf templates, even though we aren't using any
