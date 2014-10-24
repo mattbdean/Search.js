@@ -6,12 +6,16 @@ shopt -s extglob
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"
 
+OUT="build"
+
+rm -rf $OUT/
 grunt # Build the website
-cp "build/" -r .. # Move the build dir to safety
+cp -r lib/* $OUT/ # Move the libs to the output dir
+cp "$OUT/" -r .. # Move the out dir to safety
 git checkout gh-pages
 rm !(.git*|.|..) -rf # Remove all but .git, the current and parent dirs
-mv ../build/* ./ # Move the contents of the build dir here
-rm -r ../build/ # ... and then remove it
+mv ../$OUT/* ./ # Move the contents of the output dir here
+rm -r ../$OUT/ # ... and then remove it
 git add . 
 git commit -m "Update gh-pages"
 git push

@@ -19,20 +19,18 @@ module.exports = function(grunt) {
                 ext: '.min.css'
             }
         },
-        copy: {
-            main: {
-                files: [
-                    {
-                        src: ['src/index.html'],
-                        dest: 'build/index.html'
-                    }
-                ]
+        processhtml: {
+            options: {},
+            dist: {
+                files: {
+                    'build/index.html': ['src/index.html']
+                }
             }
         }
     });
     
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('default', ['uglify', 'cssmin', 'copy']);
+    grunt.loadNpmTasks('grunt-processhtml');
+    grunt.registerTask('default', ['uglify', 'cssmin', 'processhtml']);
 }
